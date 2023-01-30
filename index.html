@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR Code Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      form {
+        display: inline-block;
+        text-align: left;
+      }
+      #input-text {
+        width: 300px;
+        height: 30px;
+        padding: 5px;
+        font-size: 16px;
+      }
+      #generate-btn, #download-btn {
+        width: 120px;
+        height: 40px;
+        font-size: 16px;
+      }
+      #qr-code-container {
+        display: inline-block;
+        margin: 20px;
+      }
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>QR Code Generator</h1>
+    <form>
+      <label for="input-text">Enter text to encode:</label>
+      <br><br>
+      <input type="text" id="input-text" name="input-text">
+      <br><br>
+      <button id="generate-btn">Generate QR Code</button>
+    </form>
+    <br><br>
+    <div id="qr-code-container"></div>
+    <br><br>
+    <button id="download-btn" disabled>Download QR Code</button>
+    <script>
+      const generateBtn = document.getElementById("generate-btn");
+      const downloadBtn = document.getElementById("download-btn");
+      const inputText = document.getElementById("input-text");
+      const qrCodeContainer = document.getElementById("qr-code-container");
+
+      generateBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        const text = inputText.value;
+        const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${text}&size=100x100`;
+        const img = document.createElement("img");
+        img.src = apiUrl;
+        qrCodeContainer.innerHTML = "";
+        qrCodeContainer.appendChild(img);
+        downloadBtn.disabled = false;
+      });
+
+      downloadBtn.addEventListener("click", function() {
+        const link = document.createElement("a");
+        link.download = "qr-code.png";
+        link.href = qrCodeContainer.firstChild.src;
+        link.click();
+      });
+    </script>
+  </body>
+</html>
